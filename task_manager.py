@@ -105,5 +105,3 @@ def odstranit_ukol():
 
 ukoly = []
 hlavni_menu()
-
-
