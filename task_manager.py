@@ -32,18 +32,31 @@ def hlavni_menu():
 def pridat_ukol():
     # zadání názvu úkolu
     while True:
-        global nazev
         nazev = input('Zadejte název úkolu: ').strip()
-        if nazev:
-            break
-        print('Název úkolu nesmí být prázdný.')
+        if not nazev:
+            print('Název úkolu nesmí být prázdný.')
+            continue
+        if not any(char.isalpha() for char in nazev):
+            print("Název úkolu musí obsahovat alespoň jedno písmeno.")
+            continue
+        if not any(char.isdigit() for char in nazev):
+            print("Název úkolu musí obsahovat alespoň jedno číslo.")
+            continue
+        break
 
     # zadání popisu úkolu
     while True:
         popis = input('Zadejte popis úkolu: ').strip()
-        if popis:
-            break
-        print('Popis úkolu nesmí být prázdný.')
+        if not popis:
+            print('Název úkolu nesmí být prázdný.')
+            continue
+        if not any(char.isalpha() for char in popis):
+            print("Název úkolu musí obsahovat alespoň jedno písmeno.")
+            continue
+        if not any(char.isdigit() for char in popis):
+            print("Název úkolu musí obsahovat alespoň jedno číslo.")
+            continue
+        break
         
    # vyčlenění čísla úkolu
     match = re.search(r"\d+", nazev)
@@ -63,7 +76,7 @@ def pridat_ukol():
     # přidání do seznamu
     ukoly.append(ukol)
 
-    print(f'Úkol {nazev} byl přidán')
+    print(f'Úkol "{nazev}" byl přidán')
 
 
 def zobrazit_ukoly():
