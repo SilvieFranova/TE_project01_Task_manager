@@ -9,7 +9,7 @@ def hlavni_menu():
         print("3. Odstranit úkol\n4. Konec programu")
         global vyber_akce 
 
-        # ošetření vstupu: 
+        # ošetření vstupu:
         while True:
             vyber_akce = input("Vyberte možnost (1-4): ")
             if vyber_akce.isdigit() and 0 < int(vyber_akce) < 5:
@@ -42,29 +42,22 @@ def pridat_ukol():
         if not any(char.isdigit() for char in nazev):
             print("Název úkolu musí obsahovat alespoň jedno číslo.")
             continue
+        # vyčlenění čísla úkolu
+        match = re.search(r"\d+", nazev)
+        cislo = int(match.group())
+        # kontrola duplicity čísla
+        if any(ukol["cislo"] == cislo for ukol in ukoly):
+            print(f'Úkol s číslem {cislo} už existuje. Zadejte jiný název úkolu.')
+            continue
         break
 
     # zadání popisu úkolu
     while True:
         popis = input('Zadejte popis úkolu: ').strip()
         if not popis:
-            print('Název úkolu nesmí být prázdný.')
-            continue
-        if not any(char.isalpha() for char in popis):
-            print("Název úkolu musí obsahovat alespoň jedno písmeno.")
-            continue
-        if not any(char.isdigit() for char in popis):
-            print("Název úkolu musí obsahovat alespoň jedno číslo.")
+            print('Popis úkolu nesmí být prázdný.')
             continue
         break
-        
-   # vyčlenění čísla úkolu
-    match = re.search(r"\d+", nazev)
-    global cislo
-    if match:
-        cislo = int(match.group())
-    else:
-        cislo = None
 
     # vytvoření slovníku
     ukol = {
@@ -82,7 +75,7 @@ def pridat_ukol():
 def zobrazit_ukoly():
     print('\nSeznam úkolů:')
 
-    global i 
+    global i
     i = 1
 
     for u in ukoly:
@@ -91,28 +84,31 @@ def zobrazit_ukoly():
 
 
 def odstranit_ukol():
-    # ošetření prázdného seznamu
     if not ukoly:
         print('Nejsou uloženy žádné úkoly.\n')
         return
 
     zobrazit_ukoly()
 
-    rozsah = len(ukoly)
-
-    # ošetření že uživatel zadá opravdu číslo
     while True:
-        maz_cislo = input('\nZadejte číslo úkolu, který chcete odstranit: ').strip()
-        if maz_cislo.isdigit():     # isdigit() implicitně řeší prázdný vstup, takže ho nemusím ošetřovat
-            maz_cislo = int(maz_cislo)
-            break
-        print('Neplatný vstup, zadejte číslo.')
-    for index, ukol in enumerate(ukoly):
-        if ukol["cislo"] == maz_cislo:
-            odebrany = ukoly.pop(index)
-            print(f'Úkol "{odebrany["nazev"]}" byl odstraněn.')
-            return
-    print('Neplatný vstup, zadejte platný název úkolu: ')
+
+        # validace vstupu
+        while True:
+            maz_cislo = input('\nZadejte číslo úkolu, který chcete odstranit: ').strip()
+            if maz_cislo.isdigit():
+                maz_cislo = int(maz_cislo)
+                break
+            print('Neplatný vstup, zadejte číslo.')
+
+        # hledání úkolu
+        for index, ukol in enumerate(ukoly):
+            if ukol["cislo"] == maz_cislo:
+                odebrany = ukoly.pop(index)
+                print(f'Úkol "{odebrany["nazev"]}" byl odstraněn.')
+                return  # ← tady končíme úspěšně
+
+        # pokud se nenašel
+        print('Úkol s tímto číslem nebyl nalezen. Zkuste to znovu.')
 
 
 
