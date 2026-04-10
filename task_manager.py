@@ -39,10 +39,6 @@ def pridat_ukol():
         if not any(char.isalpha() for char in nazev):
             print("Název úkolu musí obsahovat alespoň jedno písmeno.")
             continue
-        # název obsahuje alespoň jedno číslo (viz zadání "Úkol 1")
-        if not any(char.isdigit() for char in nazev):
-            print("Název úkolu musí obsahovat alespoň jedno číslo.")
-            continue
         # vyčlenění čísla úkolu + kontrola
         vyclenit = re.search(r"\d+", nazev)
         if not vyclenit:
